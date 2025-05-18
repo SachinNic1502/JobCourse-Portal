@@ -43,7 +43,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -55,10 +55,16 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-4916802033150193" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4916802033150193"
+         crossOrigin="anonymous"></script>
+         
+      </head>
       <body>
         <WebsiteSchema baseUrl={baseUrl} />
         <SessionWrapper>
-        <Navbar />
+          <Navbar />
           <div className="container mx-auto px-4 py-8">
             {children}
           </div>

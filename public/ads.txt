@@ -1,0 +1,5 @@
+# Example ads.txt file for ad networks
+# Replace with your actual ad network lines as needed
+
+# Google AdSense
+google.com, pub-4916802033150193, DIRECT, f08c47fec0942fa0
