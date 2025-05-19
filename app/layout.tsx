@@ -57,11 +57,14 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="google-adsense-account" content="ca-pub-4916802033150193" />
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4916802033150193"
-         crossOrigin="anonymous"></script>
-         
+        <script
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4916802033150193`}
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body>
+        <GoogleAdsScript />
         <WebsiteSchema baseUrl={baseUrl} />
         <SessionWrapper>
           <Navbar />
@@ -84,4 +87,5 @@ import './globals.css';
 import SessionWrapper from "./SessionWrapper"
 import Navbar from "@/components/layout/navbar"
 import Footer from "@/components/layout/footer"
+import GoogleAdsScript from "@/components/ads/google-ads-script"
 
