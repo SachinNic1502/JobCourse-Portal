@@ -4,6 +4,7 @@ import JobsList from "@/components/jobs/jobs-list"
 import { Skeleton } from "@/components/ui/skeleton"
 import AdBanner from "@/components/ads/ad-banner"
 import AdSidebar from "@/components/ads/ad-sidebar"
+import JobFilters from "@/components/jobs/job-filters"
 
 export const metadata: Metadata = {
   title: "Jobs - JobCourse Portal",
@@ -13,10 +14,10 @@ export const metadata: Metadata = {
 export default function JobsPage({
   searchParams,
 }: {
-  searchParams: { page?: string }
+  searchParams: { page?: string; location?: string; category?: string; salary?: string; type?: string }
 }) {
-  const params = searchParams;
-  const page = params.page ? Number.parseInt(params.page) : 1
+  const page = searchParams.page ? Number.parseInt(searchParams.page) : 1
+  const { location, category, salary, type } = searchParams
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -30,14 +31,25 @@ export default function JobsPage({
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
+        <div className="lg:w-1/4">
+          <div className="sticky top-24">
+            <JobFilters
+              selectedLocation={location}
+              selectedCategory={category}
+              selectedSalary={salary}
+              selectedType={type}
+            />
+          </div>
+        </div>
+
         <div className="flex-1">
           <Suspense fallback={<JobsListSkeleton />}>
-            <JobsList page={page} />
+            <JobsList page={page} location={location} category={category} salary={salary} type={type} />
           </Suspense>
         </div>
 
-        <div className="hidden lg:block">
-          <div className="sticky top-8">
+        <div className="hidden xl:block xl:w-1/4">
+          <div className="sticky top-24">
             <AdSidebar adSlot="3456789012" />
           </div>
         </div>
@@ -49,8 +61,8 @@ export default function JobsPage({
 function JobsListSkeleton() {
   return (
     <div className="space-y-6">
-      {Array.from({ length: 10 }).map((_, i) => (
-        <div key={i} className="border rounded-lg p-6">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div key={i} className="border rounded-lg p-6 shadow-sm">
           <Skeleton className="h-8 w-2/3 mb-4" />
           <Skeleton className="h-4 w-1/3 mb-2" />
           <Skeleton className="h-4 w-1/4 mb-2" />

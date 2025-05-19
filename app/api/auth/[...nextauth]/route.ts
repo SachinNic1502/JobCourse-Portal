@@ -17,19 +17,6 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Email and password are required")
         }
 
-        // Check for admin credentials from .env
-        if (
-          credentials.email === process.env.ADMIN_EMAIL &&
-          credentials.password === process.env.ADMIN_PASSWORD
-        ) {
-          return {
-            id: "admin",
-            name: "Admin",
-            email: process.env.ADMIN_EMAIL,
-            role: "admin",
-          }
-        }
-
         await connectToDatabase()
 
         const user = await User.findOne({ email: credentials.email })

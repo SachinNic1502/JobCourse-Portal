@@ -4,10 +4,12 @@ import { notFound } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
 import { getCourseById } from "@/lib/courses"
 import { Button } from "@/components/ui/button"
-import { BookOpen, Clock, DollarSign, Calendar, ExternalLink } from "lucide-react"
+import { BookOpen, Clock, DollarSign, Calendar, ExternalLink, Users } from "lucide-react"
 import AdBanner from "@/components/ads/ad-banner"
 import AdArticle from "@/components/ads/ad-article"
 import CourseSchema from "@/components/seo/course-schema"
+import ShareButtons from "@/components/social/share-buttons"
+import CommunityLinks from "@/components/social/community-links"
 
 interface CoursePageProps {
   params: {
@@ -30,7 +32,6 @@ export async function generateMetadata({ params }: CoursePageProps): Promise<Met
   }
 }
 
-// Add this inside the CoursePage component
 export default async function CoursePage({ params }: CoursePageProps) {
   const course = await getCourseById(params.id)
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jobcourseportal.com"
@@ -79,6 +80,22 @@ export default async function CoursePage({ params }: CoursePageProps) {
                 <span>Added {formatDistanceToNow(new Date(course.createdAt), { addSuffix: true })}</span>
               </div>
             </div>
+
+            {/* Share buttons */}
+            <div className="flex flex-wrap items-center justify-between gap-4 my-6">
+              <ShareButtons
+                url={`/courses/${course._id}`}
+                title={`${course.title} by ${course.provider}`}
+                description={`Check out this course: ${course.title} by ${course.provider}`}
+              />
+
+              <CommunityLinks
+                whatsappLink="https://chat.whatsapp.com/coursesgroup"
+                telegramLink="https://t.me/coursesgroup"
+                variant="outline"
+                size="sm"
+              />
+            </div>
           </div>
 
           <div className="flex justify-center">
@@ -104,13 +121,30 @@ export default async function CoursePage({ params }: CoursePageProps) {
             </div>
           </div>
 
-          <div className="flex justify-center">
-            <Button asChild size="lg" className="gap-2">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <Button asChild size="lg" className="gap-2 w-full sm:w-auto">
               <a href={course.enrollmentUrl} target="_blank" rel="noopener noreferrer">
                 Enroll Now
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
+
+            <Button variant="outline" size="lg" className="gap-2 w-full sm:w-auto">
+              <Users className="h-4 w-4" />
+              Join Learning Community
+            </Button>
+          </div>
+
+          <div className="bg-muted/30 rounded-lg p-6 mt-8">
+            <h3 className="text-lg font-medium mb-4">Connect with other learners</h3>
+            <p className="text-muted-foreground mb-4">
+              Join our community groups to connect with other students, share resources, and get help with your learning
+              journey.
+            </p>
+            <CommunityLinks
+              whatsappLink="https://chat.whatsapp.com/coursesgroup"
+              telegramLink="https://t.me/coursesgroup"
+            />
           </div>
         </div>
       </div>

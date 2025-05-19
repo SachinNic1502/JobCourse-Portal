@@ -4,10 +4,12 @@ import { notFound } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
 import { getJobById } from "@/lib/jobs"
 import { Button } from "@/components/ui/button"
-import { Briefcase, MapPin, DollarSign, Calendar, ExternalLink } from "lucide-react"
+import { Briefcase, MapPin, DollarSign, Calendar, ExternalLink, Users } from "lucide-react"
 import AdBanner from "@/components/ads/ad-banner"
 import AdArticle from "@/components/ads/ad-article"
 import JobSchema from "@/components/seo/job-schema"
+import ShareButtons from "@/components/social/share-buttons"
+import CommunityLinks from "@/components/social/community-links"
 
 interface JobPageProps {
   params: {
@@ -30,7 +32,6 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   }
 }
 
-// Add this inside the JobPage component
 export default async function JobPage({ params }: JobPageProps) {
   const job = await getJobById(params.id)
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jobcourseportal.com"
@@ -79,6 +80,22 @@ export default async function JobPage({ params }: JobPageProps) {
                 <span>Posted {formatDistanceToNow(new Date(job.createdAt), { addSuffix: true })}</span>
               </div>
             </div>
+
+            {/* Share buttons */}
+            <div className="flex flex-wrap items-center justify-between gap-4 my-6">
+              <ShareButtons
+                url={`/jobs/${job._id}`}
+                title={`${job.title} at ${job.company}`}
+                description={`Check out this job opportunity: ${job.title} at ${job.company}`}
+              />
+
+              <CommunityLinks
+                whatsappLink="https://chat.whatsapp.com/jobsgroup"
+                telegramLink="https://t.me/jobsgroup"
+                variant="outline"
+                size="sm"
+              />
+            </div>
           </div>
 
           <div className="flex justify-center">
@@ -104,13 +121,27 @@ export default async function JobPage({ params }: JobPageProps) {
             </div>
           </div>
 
-          <div className="flex justify-center">
-            <Button asChild size="lg" className="gap-2">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <Button asChild size="lg" className="gap-2 w-full sm:w-auto">
               <a href={job.applicationUrl} target="_blank" rel="noopener noreferrer">
                 Apply Now
                 <ExternalLink className="h-4 w-4" />
               </a>
             </Button>
+
+            <Button variant="outline" size="lg" className="gap-2 w-full sm:w-auto">
+              <Users className="h-4 w-4" />
+              Join Job Seekers Community
+            </Button>
+          </div>
+
+          <div className="bg-muted/30 rounded-lg p-6 mt-8">
+            <h3 className="text-lg font-medium mb-4">Connect with other job seekers</h3>
+            <p className="text-muted-foreground mb-4">
+              Join our community groups to network with other professionals, get interview tips, and stay updated on the
+              latest job opportunities.
+            </p>
+            <CommunityLinks whatsappLink="https://chat.whatsapp.com/jobsgroup" telegramLink="https://t.me/jobsgroup" />
           </div>
         </div>
       </div>

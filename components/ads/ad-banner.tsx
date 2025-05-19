@@ -11,7 +11,7 @@ interface AdBannerProps {
 }
 
 export default function AdBanner({ adSlot, width = 728, height = 90, format = "auto", className = "" }: AdBannerProps) {
-  const adRef = useRef<HTMLElement>(null)
+  const adRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Skip ad loading during development
@@ -19,8 +19,8 @@ export default function AdBanner({ adSlot, width = 728, height = 90, format = "a
 
     try {
       // Add ad after component mounts
-      const adsbygoogle = (window as any).adsbygoogle || []
-      adsbygoogle.push({})
+      // @ts-ignore
+      ;(window.adsbygoogle = window.adsbygoogle || []).push({})
     } catch (error) {
       console.error("Error loading Google AdSense:", error)
     }
@@ -37,25 +37,13 @@ export default function AdBanner({ adSlot, width = 728, height = 90, format = "a
     )
   }
 
-  // If AdSense client ID is missing, show a message
-  if (!process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID) {
-    return (
-      <div
-        className={`bg-yellow-100 border border-yellow-400 text-yellow-800 px-4 py-2 rounded ${className}`}
-        style={{ width: width ? `${width}px` : "100%", height: `${height}px`, maxWidth: "100%" }}
-      >
-        Ad is not showing. Please check your Google AdSense setup and ensure your ad blocker is disabled.
-      </div>
-    )
-  }
-
   return (
     <div className={className}>
       <ins
         ref={adRef}
         className="adsbygoogle"
         style={{ display: "block", width: width ? `${width}px` : "100%", height: `${height}px`, maxWidth: "100%" }}
-        data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID}
+        data-ad-client={process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_CLIENT_ID || "ca-pub-xxxxxxxxxxxxxxxx"}
         data-ad-slot={adSlot}
         data-ad-format={format}
         data-full-width-responsive="true"

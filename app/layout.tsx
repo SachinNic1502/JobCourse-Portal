@@ -1,6 +1,16 @@
-import type { Metadata } from "next/server"
 import type React from "react"
+import type { Metadata } from "next"
+import { Inter } from "next/font/google"
+import "./globals.css"
+import Navbar from "@/components/layout/navbar"
+import Footer from "@/components/layout/footer"
+import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/components/auth/auth-provider"
+import { Toaster } from "@/components/ui/toaster"
+import GoogleAdsScript from "@/components/ads/google-ads-script"
 import WebsiteSchema from "@/components/seo/website-schema"
+
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: {
@@ -15,10 +25,6 @@ export const metadata: Metadata = {
   formatDetection: {
     email: false,
     telephone: false,
-  },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://jobcourseportal.com"),
-  alternates: {
-    canonical: "/",
   },
   openGraph: {
     type: "website",
@@ -43,7 +49,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  generator: 'v0.dev'
+    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -54,38 +60,22 @@ export default function RootLayout({
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://jobcourseportal.com"
 
   return (
-    <html lang="en">
-      <head>
-        <meta name="google-adsense-account" content="ca-pub-4916802033150193" />
-        <script
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4916802033150193`}
-          crossOrigin="anonymous"
-        ></script>
-      </head>
-      <body>
-        <GoogleAdsScript />
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className={inter.className}>
         <WebsiteSchema baseUrl={baseUrl} />
-        <SessionWrapper>
-          <Navbar />
-          <div className="container mx-auto px-4 py-8">
-            {children}
-          </div>
-          <footer className="bg-gray-800 text-white py-4">
-            <div className="container mx-auto text-center">
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <div className="flex min-h-screen flex-col">
+              <Navbar />
+              <main className="flex-1">{children}</main>
               <Footer />
             </div>
-          </footer>
-        </SessionWrapper>
+            <Toaster />
+          </ThemeProvider>
+        </AuthProvider>
+        <GoogleAdsScript />
       </body>
     </html>
   )
 }
-
-
-import './globals.css';
-import SessionWrapper from "./SessionWrapper"
-import Navbar from "@/components/layout/navbar"
-import Footer from "@/components/layout/footer"
-import GoogleAdsScript from "@/components/ads/google-ads-script"
-
